@@ -1,3 +1,22 @@
+.presupuesto-btn {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-dark {
+	background-color: #263d4d;
+}
+
+#resultadoPresupuesto {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 50px;
+  border-radius: 30px;
+  background-color: #5c8eb0;
+  color: white;
+}
+
 /*--------------------------------------------------------------
 # Our Portfolio
 --------------------------------------------------------------*/
