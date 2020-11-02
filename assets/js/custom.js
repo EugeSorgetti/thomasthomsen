@@ -32,6 +32,8 @@ function tecla (e) {
     }
 }
 
+//Opciones desplegables
+
 var instrumento =$("#selectInstrumentos");
 
 $("#selectInstrumentos").change (mostrarTipoInstrumento);
@@ -79,7 +81,7 @@ $("#metodo").change (function () {
 
 		$("#cuotas").append("<option value='1'>1 cuota sin interés</option>");
 		$("#cuotas").append("<option value='3'>3 cuotas sin interés</option>");
-		$("#cuotas").append("<option value='6'>6 cuotas</option>");
+		$("#cuotas").append("<option value='6'>6 cuotas sin interés</option>");
 		$("#cuotas").append("<option value='9'>9 cuotas</option>");
 		$("#cuotas").append("<option value='12'>12 cuotas</option>");
 
@@ -113,9 +115,14 @@ localStorage.setItem("Cliente", JSON.stringify(cliente));
 console.log (cliente);
 })
 
+//Cálculos
+
+
 var precioMateriales = 0;
 
 $("#presupuesto").submit (function () {
+
+	precioMateriales = 0;
 
 	var tapa = $("#tapa").val();
 	var fondo = $("#fondo").val();
@@ -124,7 +131,7 @@ $("#presupuesto").submit (function () {
 	var mango = $("#mango").val();
 	var puente = $("#puente").val();
 
-	if (tapa == "abeto" || "cedro") {
+	if (tapa == "abeto" || tapa == "cedro") {
 
 		precioMateriales += 4300;
 	}
@@ -154,7 +161,7 @@ $("#presupuesto").submit (function () {
 		precioMateriales += 3200;		
 	}
 	
-	if (fondo == "moradillo" || "bolivia") {
+	if (fondo == "moradillo" || fondo == "bolivia") {
 
 		precioMateriales += 4200;		
 	}
@@ -210,7 +217,7 @@ $("#presupuesto").submit (function () {
 		precioMateriales += 900;		
 	}
 
-	if (cabeza == "ebano" || "india") {
+	if (cabeza == "ebano" || cabeza == "india") {
 
 		precioMateriales += 600;		
 	}
@@ -235,7 +242,7 @@ $("#presupuesto").submit (function () {
 		precioMateriales += 900;
 	}
 
-	if (puente == "ebano" || "india") {
+	if (puente == "ebano" || puente == "india") {
 
 		precioMateriales += 600;
 	}
@@ -263,29 +270,58 @@ function mostrarPresupuesto () {
 
 $("#presupuesto").submit (function () {
 
+	$("#resultadoPresupuesto").html("");
 	var tipoDeInstrumento = $("#tipoInstrumento").val();
 	var presupuesto = 0;
+	var cuotas = parseInt($("#cuotas").val());
 
-	if (precioMateriales > 10000 && tipoDeInstrumento == "clasica" || "acustica") {
 
-		presupuesto = precioMateriales*10;
-	}else if (precioMateriales < 10000 && tipoDeInstrumento == "clasica" || "acustica") {
-
-		presupuesto = precioMateriales*12;
-	}else if (precioMateriales > 10000 && tipoDeInstrumento == "tenor") {
+	if ((precioMateriales > 10000 && tipoDeInstrumento == "clasica") || (precioMateriales > 10000 && tipoDeInstrumento == "acustica")) {
 
 		presupuesto = precioMateriales*5;
-	}else if (precioMateriales < 10000 && tipoDeInstrumento == "tenor") {
+
+	}else if ((precioMateriales < 10000 && tipoDeInstrumento == "clasica") || (precioMateriales < 10000 && tipoDeInstrumento =="acustica")) {
 
 		presupuesto = precioMateriales*8;
+
+	}else if ((precioMateriales > 13000 && tipoDeInstrumento == "tenor") ||(precioMateriales > 10000 && tipoDeInstrumento == "baritono") ) {
+
+		presupuesto = precioMateriales*1.75;
+
+	}else if ((precioMateriales < 13000 && tipoDeInstrumento == "tenor") || (precioMateriales < 10000 && tipoDeInstrumento == "baritono")) {
+
+		presupuesto = precioMateriales*2.16;
+	} else if (precioMateriales > 7000 && tipoDeInstrumento =="soprano") {
+		presupuesto = precioMateriales*2;
+	} else if (precioMateriales < 7000 && tipoDeInstrumento =="soprano") {
+		presupuesto = precioMateriales*2.6
 	} else {
-		presupuesto = precioMateriales*7.2;
+		presupuesto = "(0) no válido. Por favor complete todos los campos";
 	}
 
 	console.log("El precio final es de $" + presupuesto);
 
-	$("#resultadoPresupuesto").append(presupuesto);
+	$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);;
+
+	if (metodo.val() == "credito") {
+
+		if (cuotas == "1" || cuotas == "3" || cuotas == "6") {
+			var cuotaFija = presupuesto/cuotas;
+			$("#resultadoPresupuesto").append(`<p>, a pagar en ${cuotas} cuotas de $${cuotaFija}</p>`);
+		} else {
+			var cuotaInteres = presupuesto*1.55/cuotas;
+			$("#resultadoPresupuesto").append(`<p>, a pagar en ${cuotas} cuotas de $${cuotaInteres}</p>`);
+		}
+	} else if (metodo.val() == "efectivo" || metodo.val() == "debito") {
+
+		var anticipo = presupuesto/2;
+		$("#resultadoPresupuesto").append(`<p>, pagando un anticipo de ${anticipo} </p>`);
+
+	}
+
+	console.log(cuotaInteres);
 });
+
 
 $("#borrar").click(function(){
 
