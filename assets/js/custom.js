@@ -85,6 +85,8 @@ $("#metodo").change (function () {
 		$("#cuotas").append("<option value='9'>9 cuotas</option>");
 		$("#cuotas").append("<option value='12'>12 cuotas</option>");
 
+	} if (metodo.val() == "debito" || metodo.val() == "efectivo") {
+			$("#cuotas").fadeOut(500);
 	}
 });
 
@@ -312,6 +314,7 @@ $("#presupuesto").submit (function () {
 
 		presupuestoConInteres = presupuesto*1.55;
 
+		$("#resultadoPresupuesto").html("");
 		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuestoConInteres}`);
 	}
 
@@ -323,7 +326,7 @@ $("#presupuesto").submit (function () {
 			var cuotaFija = presupuesto/cuotas;
 			$("#resultadoPresupuesto").append(`<p>, a pagar en ${cuotas} cuotas de $${cuotaFija}</p>`);
 		} else {
-			var cuotaInteres = presupuesto*1.55/cuotas;
+			var cuotaInteres = presupuestoConInteres/cuotas;
 			$("#resultadoPresupuesto").append(`<p>, a pagar en ${cuotas} cuotas de $${cuotaInteres}</p>`);
 		}
 	} else if (metodo.val() == "efectivo" || metodo.val() == "debito") {
