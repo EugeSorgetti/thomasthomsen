@@ -255,6 +255,8 @@ $("#presupuesto").submit (function () {
 	if (puente == "nogal") {
 
 		precioMateriales += 100;
+	} if (tapa == "" || fondo == "" || diapason == "" || cabeza == "" || mango == "" || puente == "") {
+		$("#resultadoPresupuesto").append("<p> Por favor complete todos los campos</p>")
 	}
 
 
@@ -279,29 +281,41 @@ $("#presupuesto").submit (function () {
 	if ((precioMateriales > 10000 && tipoDeInstrumento == "clasica") || (precioMateriales > 10000 && tipoDeInstrumento == "acustica")) {
 
 		presupuesto = precioMateriales*5;
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
 
 	}else if ((precioMateriales < 10000 && tipoDeInstrumento == "clasica") || (precioMateriales < 10000 && tipoDeInstrumento =="acustica")) {
 
 		presupuesto = precioMateriales*8;
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
 
 	}else if ((precioMateriales > 13000 && tipoDeInstrumento == "tenor") ||(precioMateriales > 10000 && tipoDeInstrumento == "baritono") ) {
 
 		presupuesto = precioMateriales*1.75;
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
 
 	}else if ((precioMateriales < 13000 && tipoDeInstrumento == "tenor") || (precioMateriales < 10000 && tipoDeInstrumento == "baritono")) {
 
 		presupuesto = precioMateriales*2.16;
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
 	} else if (precioMateriales > 7000 && tipoDeInstrumento =="soprano") {
 		presupuesto = precioMateriales*2;
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
 	} else if (precioMateriales < 7000 && tipoDeInstrumento =="soprano") {
 		presupuesto = precioMateriales*2.6
-	} else {
-		presupuesto = "(0) no válido. Por favor complete todos los campos";
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);
+	}
+	else {
+		$("#resultadoPresupuesto").append(`<p> Por favor elija un instrumento</p>`);
+	}
+
+	if (cuotas == "9" || cuotas == "12") {
+
+		presupuestoConInteres = presupuesto*1.55;
+
+		$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuestoConInteres}`);
 	}
 
 	console.log("El precio final es de $" + presupuesto);
-
-	$("#resultadoPresupuesto").append(`<p> El costo por este instrumento es de $${presupuesto}`);;
 
 	if (metodo.val() == "credito") {
 
